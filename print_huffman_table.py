@@ -3,9 +3,10 @@ import sys
 
 def print_codes(lengths):
 
+
     # MAX_BITS = 15 -> maximum number of bits for code lengths
     # bl_count stores how many codes are found for each symbol  code
-    min_length = 15 
+    min_length = 15
     bl_count = [0] * 16 
     for lines in lengths:
          bl_count[lines[1]-1]+=1 
@@ -22,11 +23,14 @@ def print_codes(lengths):
         if  bl_count[ bits ]:
                 next_code[ bits ] = code
 
-    print "Huffman tree code lengths:"
-    print "========================="
+    print("Huffman tree length start codes:")
+    print("=========================")
+
     for bits in range(min_length,16):
-        print bits,bin(next_code[bits-1])[2:].zfill(min_length)
-    print "========================="
+        if bits == min_length or next_code[bits-1] != 0:
+            print(f'{bits:2}: {next_code[bits-1]:0{bits}b}')
+    
+    print("=========================")
 
 
 
@@ -47,7 +51,7 @@ def print_codes(lengths):
         for lines in lengths:
                 bits = lines[1]
                 if lines[0] < 256 and bits == current_bits:
-                        print "%06s" % repr(chr(lines[0])), bin(next_code[bits-1])[2:].zfill(min_length)
+                        print(f'{repr(chr(lines[0])):6}: {next_code[bits-1]:0{bits}b}')
                 if bits == current_bits:
                         next_code[bits-1] +=1
 
@@ -61,12 +65,12 @@ def read_lengths(infgen_output):
     blockslist = []
     blocklines = []
     for line in infgen_output:
-	if line.startswith('end'):  # All blocks should have an "end" directive , otherwise this will fail
-		blockslist.append (blocklines)	
-		blocklines = []
-	elif 'litlen' in line:
-		split = line.split()
-		blocklines.append( (int(split[1]),int(split[2])) )
+        if line.startswith('end'):  # All blocks should have an "end" directive , otherwise this will fail
+            blockslist.append (blocklines)	
+            blocklines = []
+        elif 'litlen' in line:
+            split = line.split()
+            blocklines.append( (int(split[1]),int(split[2])) )
     return blockslist
 
 
@@ -80,13 +84,12 @@ if __name__ == "__main__":
    '''
 
     blockslist = read_lengths(sys.stdin)
-    block_no = 0
 
-    for blocks in blockslist:
-	block_no += 1
-	print "Block number = ", block_no
-	print "========================="
+    for block_no, blocks in enumerate(blockslist):
+        print("Block number = ", block_no)
+        print("=========================")
+        
         print_codes(blocks)
-	print "\n"
-    
-    print "Number of blocks = ", block_no
+        print("\n")
+        
+        print("Number of blocks = ", block_no)
