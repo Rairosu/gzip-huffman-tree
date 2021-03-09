@@ -1,5 +1,5 @@
 This is a fork of a project by @jvns.
-I needed it for a ctf challenge and thought it would be useful to port it on python 3 and make some improvements to it.
+I thought it would be useful to port it on python 3 and make some improvements to it, to be able to better understand the deflate algorithm.
 I don't know if I will continue working on it in the future, but if you want to continue this project feel free to do so.
 
 # huffman fun
